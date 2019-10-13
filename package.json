@@ -1,0 +1,28 @@
+{
+  "name": "adhandler",
+  "version": "1.2.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "webpack",
+    "tsc": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.5",
+    "jest": "^24.9.0",
+    "path": "^0.12.7",
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^6.1.0",
+    "typescript": "^3.6.3",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.8"
+  },
+  "dependencies": {
+    "@types/doubleclick-gpt": "^2019041801.0.0",
+    "save-dev": "^2.0.0"
+  }
+}
