@@ -1,4 +1,5 @@
 import {AdSlotRepository} from './AdSlotRepository';
+import { AdSlot } from './AdSlot';
 declare var window: any;
 
 export class AdHandler {
@@ -80,7 +81,6 @@ export class AdHandler {
     if (targetDevice !== this.devices.All && targetDevice !== this.getCurrentDevice()) {
       return;
     }
-
     if (typeof opts !== "undefined" && opts.isLazy === true) {
       delete opts.isLazy;
       this.lazySlots[containerId] = () => {
@@ -89,29 +89,20 @@ export class AdHandler {
       this.attachLazyslot(containerId);
       return;
     }
+
+    let slot  = new AdSlot(containerId, this.globalContextRegistry, opts);
+
+    slot.setup(slotCode, sizes, containerId, opts);
+
+    this.addAdSlot(slot);
+
+    slot.display();
+
     var that = this;
-    googletag.cmd.push(() => {
-      let slot;
-      //console.log('define slot', slotCode, sizes, containerId, window.performance.now());
-      //console.log('container for: '+containerId, document.getElementById(containerId));
-      if (opts && opts.isOutOfPage) {
-        slot = googletag.defineOutOfPageSlot(slotCode, containerId).addService(googletag.pubads());
-      } else {
-        slot = googletag.defineSlot(slotCode, sizes, containerId).addService(googletag.pubads());
-      }
-      //googletag.pubads().disableInitialLoad();
-      //slot.setTargeting(context);
-      //console.log('addadslot', this.globalContext, this);
-      that.addAdSlot(slot, this.globalContext, opts);
-      googletag.cmd.push(function() {
-        //console.log('display', containerId, slot);
-        googletag.display(containerId);
-        googletag.pubads().refresh([slot]);
-      });
-    });
   }
-  addAdSlot(dfpSlot: any, context: any, opts: any) {
-    this.slotRepository.insert(dfpSlot, context, opts);
+
+  addAdSlot(s: AdSlot) {
+    return this.slotRepository.insert(s);
   }
 
   slotIdIsDefined(containerId){

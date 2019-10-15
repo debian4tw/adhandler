@@ -10,11 +10,11 @@ export class AdSlot {
   isSticky: boolean;
   isLazy: boolean;
   
-  constructor(dfpSlot: googletag.Slot, context: Object, opts: any) {
+  constructor(containerId: string, context: Object, opts: any) {
     opts = opts || {};
-    this.id = dfpSlot.getSlotId().getId();
-    this.domId = dfpSlot.getSlotElementId();
-    this.dfpSlot = dfpSlot;
+    //this.id = dfpSlot.getSlotId().getId();
+    this.domId = containerId;
+    //this.dfpSlot =;
     this.events = [],
     this.created = window.performance.now(),
     this.context = context,
@@ -24,8 +24,31 @@ export class AdSlot {
     this.viewed = false;
   }
 
+  setup(slotCode, sizes, containerId, opts) {
+    let gslot;
+    console.log('setup slot', slotCode, sizes, containerId, opts);
+    if (typeof opts  !== "undefined" && opts.isOutOfPage) {
+      gslot = googletag.defineOutOfPageSlot(slotCode, containerId);
+    } else {
+      gslot = googletag.defineSlot(slotCode, sizes, containerId);
+    }
+    gslot.addService(googletag.pubads());
+    this.id = gslot.getSlotId().getId();
+    this.dfpSlot = gslot;
+  }
+
+  display() {
+    googletag.cmd.push(() => {
+      googletag.display(this.domId);
+      googletag.pubads().refresh([this.dfpSlot]);
+    });
+  }
+
   getId() {
     return this.id;
+  }
+  getDomId() {
+    return this.domId;
   }
 
   logEvent(eventObj: Object) {

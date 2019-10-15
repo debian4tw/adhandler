@@ -9,16 +9,17 @@ export class AdSlotRepository {
     
   }
 
-  insert(dfpSlot: googletag.Slot, context: any, opts: any) {
-    if (this.isSlotDefined(dfpSlot.getSlotId().getId())) {
+  insert(s: AdSlot) {
+    /*if (this.isSlotDefined(dfpSlot.getSlotId().getId())) {
       return false;
-    }
-    let s = new AdSlot(dfpSlot, context, opts);
+    }*/
+    //let s = new AdSlot(containerId, context, opts);
     //console.log('created AdSlot', s);
+    console.log('inserting Slot', s);
     this.adSlots[s.getId()] = s;
     //this.adSlots.push(s);
     //console.log('count;', this.adSlots.length);
-    return true;
+    return s;
   }
 
   private isSlotDefined(slotId) {
