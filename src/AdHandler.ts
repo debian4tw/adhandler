@@ -41,7 +41,10 @@ export class AdHandler {
       });
       googletag.pubads().addEventListener('impressionViewable', (event) => {
         this.addEvent({name: 'impressionViewable'}, event.slot.getSlotId().getId());
-        this.slotRepository.adSlots[event.slot.getSlotId().getId()].viewed = true;
+        //this.slotRepository.adSlots[event.slot.getSlotId().getId()].viewed = true;
+        if (this.slotRepository.adSlots.hasOwnProperty(event.slot.getSlotId().getId())) {
+          this.slotRepository.adSlots[event.slot.getSlotId().getId()].viewed = true;
+        }
       });
       googletag.pubads().addEventListener('slotVisibilityChanged', (event) => {
         //console.log(event.slot.getSlotId().getId(),'slotVisibilityChanged',event, event.inViewPercentage);
@@ -133,7 +136,7 @@ export class AdHandler {
       this.slotRepository.adSlots[slotId].events.push(event);
     } else {
       //console.log(this.slotRepository.adSlots[slotId]);
-      console.log('slot not defined on adEvent', event, slotId, window.performance.now());
+      //console.log('slot not defined on adEvent', event, slotId, window.performance.now());
     }
   }
 
