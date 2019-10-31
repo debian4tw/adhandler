@@ -9,6 +9,7 @@ export class AdSlot {
   viewed: boolean;
   isSticky: boolean;
   isLazy: boolean;
+  onViewed: undefined | Function;
   
   constructor(dfpSlot: googletag.Slot, context: Object, opts: any) {
     opts = opts || {};
@@ -22,6 +23,10 @@ export class AdSlot {
     this.isSticky = opts.isSticky || false;
     this.isLazy = opts.isLazy || false;
     this.viewed = false;
+
+    if (typeof opts.onViewed === "function") {
+      this.onViewed = opts.onViewed;
+    }
   }
 
   getId() {

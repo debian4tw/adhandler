@@ -105,7 +105,9 @@ adHandler.cmd.push(function(){
       '/11060405/MR_Mobile_End_of_Article',
       ['fluid', [320, 50], [300, 250], [320, 100], [300, 50]],
       'test3',
-      {isLazy: true}
+      {isLazy: true, onViewed: function(){
+        console.log('****viewed***');
+      }}
   );
 });
 </script>

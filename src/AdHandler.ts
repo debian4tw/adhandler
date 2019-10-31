@@ -43,7 +43,11 @@ export class AdHandler {
         this.addEvent({name: 'impressionViewable'}, event.slot.getSlotId().getId());
         //this.slotRepository.adSlots[event.slot.getSlotId().getId()].viewed = true;
         if (this.slotRepository.adSlots.hasOwnProperty(event.slot.getSlotId().getId())) {
-          this.slotRepository.adSlots[event.slot.getSlotId().getId()].viewed = true;
+          const slotId = event.slot.getSlotId().getId();
+          this.slotRepository.adSlots[slotId].viewed = true;
+          if (typeof this.slotRepository.adSlots[slotId].onViewed === "function") {
+            this.slotRepository.adSlots[slotId].onViewed();
+          } 
         }
       });
       googletag.pubads().addEventListener('slotVisibilityChanged', (event) => {
