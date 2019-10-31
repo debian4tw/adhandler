@@ -15,9 +15,9 @@ export class AdSlot {
     //this.id = dfpSlot.getSlotId().getId();
     this.domId = containerId;
     //this.dfpSlot =;
-    this.events = [],
-    this.created = window.performance.now(),
-    this.context = context,
+    this.events = [];
+    this.created = window.performance.now();
+    this.context = context;
     this.visibility = 0;
     this.isSticky = opts.isSticky || false;
     this.isLazy = opts.isLazy || false;
@@ -47,6 +47,7 @@ export class AdSlot {
   getId() {
     return this.id;
   }
+
   getDomId() {
     return this.domId;
   }

@@ -73,7 +73,6 @@ export class AdHandler {
 
   displaySlot(targetDevice, slotCode, sizes, containerId, opts) {
 
-    //console.log('display slot', window.google_DisableInitialLoad, googletag.pubadsReady);
     if (this.slotIdIsDefined(containerId)) {
       return;
     }
@@ -81,27 +80,22 @@ export class AdHandler {
     if (targetDevice !== this.devices.All && targetDevice !== this.getCurrentDevice()) {
       return;
     }
+
     if (typeof opts !== "undefined" && opts.isLazy === true) {
-      delete opts.isLazy;
-      this.lazySlots[containerId] = () => {
-        this.displaySlot(targetDevice, slotCode, sizes, containerId, opts);
-      }
-      this.attachLazyslot(containerId);
+      this.attachLazySlot(targetDevice, slotCode, sizes, containerId, opts);
       return;
     }
 
-    let slot  = new AdSlot(containerId, this.globalContextRegistry, opts);
+    let slot = new AdSlot(containerId, this.globalContextRegistry, opts);
 
     slot.setup(slotCode, sizes, containerId, opts);
 
-    this.addAdSlot(slot);
+    this.storeAdSlot(slot);
 
     slot.display();
-
-    var that = this;
   }
 
-  addAdSlot(s: AdSlot) {
+  storeAdSlot(s: AdSlot) {
     return this.slotRepository.insert(s);
   }
 
@@ -150,9 +144,12 @@ export class AdHandler {
     }, options);
   }
 
-  attachLazyslot(domId){
-    //console.log('attachingLazysSlot');
-    this.lazySlotsObserver.observe(document.getElementById(domId));
+  attachLazySlot(targetDevice, slotCode, sizes, containerId, opts) {
+    delete opts.isLazy;
+    this.lazySlots[containerId] = () => {
+      this.displaySlot(targetDevice, slotCode, sizes, containerId, opts);
+    }
+    this.lazySlotsObserver.observe(document.getElementById(containerId));
   }
 
   processContext(context){
@@ -178,18 +175,15 @@ export class AdHandler {
     }
     this.globalContext = ctx;
     this.globalContextRegistry.push(ctx);
-    //console.log('context', ctx);  
+
     googletag.cmd.push(() => {
-      //console.log('gooogpush',ctx);
       for(var x in ctx) {
-        //console.log('settarg',ctx[x]);
         googletag.pubads().setTargeting(x, ctx[x]);
       }
     });
   }
 
   startRefreshInterval() {
-    //console.log('start refresh inverval');
     this.refreshInterval = setInterval( ()=> {
       let url = window.location.href;
       if (document.hasFocus()) {
@@ -201,7 +195,6 @@ export class AdHandler {
   refreshSlotsByUrl(currentUrl) {
     for (let x in this.slotRepository.adSlots) {
       if (this.slotIsVisible(this.slotRepository.adSlots[x])) {
-        //console.log('refreshSlot', this.slotRepository.adSlots[x].id);
         googletag.pubads().refresh([this.slotRepository.adSlots[x].dfpSlot]);
       }
     }
