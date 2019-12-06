@@ -1,7 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var AdSlot = (function () {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var AdSlot = /** @class */ (function () {
         function AdSlot(dfpSlot, context, opts) {
+            opts = opts || {};
             this.id = dfpSlot.getSlotId().getId();
             this.domId = dfpSlot.getSlotElementId();
             this.dfpSlot = dfpSlot;
@@ -11,6 +13,10 @@ define(["require", "exports"], function (require, exports) {
                 this.visibility = 0;
             this.isSticky = opts.isSticky || false;
             this.isLazy = opts.isLazy || false;
+            this.viewed = false;
+            if (typeof opts.onViewed === "function") {
+                this.onViewed = opts.onViewed;
+            }
         }
         AdSlot.prototype.getId = function () {
             return this.id;

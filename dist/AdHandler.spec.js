@@ -1,5 +1,15 @@
-define(["require", "exports", './AdHandler'], function (require, exports, AdHandler_1) {
+define(["require", "exports", "./AdHandler"], function (require, exports, AdHandler_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    describe('IntersectionObserverMokTest', function () {
+        var observeMock = {
+            observe: function () { return null; },
+            disconnect: function () { return null; } // maybe not needed
+        };
+        beforeEach((function () {
+            window.IntersectionObserver = function () { return observeMock; };
+        }));
+    });
     var dfpSlot = {
         addService: function (service) {
             return this;

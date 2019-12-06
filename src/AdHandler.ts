@@ -18,7 +18,7 @@ export class AdHandler {
   lazySlots = [];
 
   refreshInterval;
-  refreshRate = this.isMobile() ? 15 : 20;
+  refreshRate = this.isMobile() ? 25 : 30;
 
   constructor(commandBuffer: Array<Function>) {
     this.cmd = commandBuffer;
@@ -216,8 +216,11 @@ export class AdHandler {
 
   refreshSlotsByUrl(currentUrl) {
     for (let x in this.slotRepository.adSlots) {
-      if (this.slotIsVisible(this.slotRepository.adSlots[x])) {
+      if (this.slotIsVisible(this.slotRepository.adSlots[x]) && !this.slotRepository.adSlots[x].isLazy) {
         //console.log('refreshSlot', this.slotRepository.adSlots[x].id);
+        let domId = this.slotRepository.adSlots[x].domId;
+        let height = document.getElementById(domId).getBoundingClientRect().height;
+        document.getElementById(domId).style.height = height + 'px';
         googletag.pubads().refresh([this.slotRepository.adSlots[x].dfpSlot]);
       }
     }
