@@ -109,6 +109,9 @@ export class AdHandler {
       //googletag.pubads().disableInitialLoad();
       //slot.setTargeting(context);
       //console.log('addadslot', this.globalContext, this);
+      if (typeof opts !== "undefined" && opts.collapseEmptyDiv === false) {
+        slot.setCollapseEmptyDiv(false);
+      }
       that.addAdSlot(slot, this.globalContext, opts);
       googletag.cmd.push(function() {
         //console.log('display', containerId, slot);
@@ -218,9 +221,9 @@ export class AdHandler {
     for (let x in this.slotRepository.adSlots) {
       if (this.slotIsVisible(this.slotRepository.adSlots[x]) && !this.slotRepository.adSlots[x].isLazy) {
         //console.log('refreshSlot', this.slotRepository.adSlots[x].id);
-        let domId = this.slotRepository.adSlots[x].domId;
-        let height = document.getElementById(domId).getBoundingClientRect().height;
-        document.getElementById(domId).style.height = height + 'px';
+        //let domId = this.slotRepository.adSlots[x].domId;
+        //let height = document.getElementById(domId).getBoundingClientRect().height;
+        //document.getElementById(domId).style.height = height + 'px';
         googletag.pubads().refresh([this.slotRepository.adSlots[x].dfpSlot]);
       }
     }
